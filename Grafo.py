@@ -164,3 +164,4 @@ class Grafo:
     
     print(f"Os grafos isolados são: {isolados}")
 
+  

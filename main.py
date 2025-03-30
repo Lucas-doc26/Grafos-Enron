@@ -3,8 +3,7 @@ from Grafo import *
 from email.parser import Parser
 from email.policy import default
 
-
-def grafo_eron(graph):
+def grafo_enron(graph):
     base_path = 'Amostra Enron - 2016'
 
     emails_dir = []
@@ -52,7 +51,7 @@ def grafo_eron(graph):
 
 #Questão 1 
 eron = Grafo()
-#eron = grafo_eron(eron)
+#eron = grafo_enron(eron)
 #eron.salva_grafo('grafo.txt')
 eron.carrega_grafo('grafo.txt')
 
@@ -69,4 +68,5 @@ eron.vertices_isolados()
 
 
 #Questão 3
+
 
