@@ -1,4 +1,5 @@
 import re
+import numpy as np
 
 class Grafo:
   def __init__(self):
@@ -163,5 +164,47 @@ class Grafo:
         isolados.append(vertice)
     
     print(f"Os grafos isolados são: {isolados}")
+
+  #Implemente um método que retorne uma lista com todos os vértices que
+  #estão localizados até uma distância D de um vértice N, em que D é a soma dos
+  #pesos ao longo do caminho mais curto entre dois vértices. A implementação deve
+  #ser eficiente o suficiente para lidar com grafos com milhares de vértices e arestas
+  #sem exceder limites razoáveis de tempo e memória.
+
+  def return_no(self, nome):
+    return self.corpo[nome]
+
+  def get_adjacente(self, no):
+    if no not in self.corpo:
+      raise ValueError("Esse nó não existe!")
+    else:
+      return self.corpo[no]
+
+  def get_prox_no(self, no):
+    adjacentes = self.get_adjacente(no)
+    menor = [None, 0]
+    for adj in adjacentes:
+      if adj[1] > menor[1]:
+        menor = adj
+    return menor
+
+  def dijkstra(self, no_origem, no_destino):
+    visitados = []
+    custo = [([np.inf, None], [np.inf, None]) for i in range(self.ordem)] #crio uma lista de custos, 
+    custo[0] = no_origem, 0
+    custo.index(no_origem)
+    no_atual = no_origem
+    while no_destino not in visitados:
+      adjcentes = self.get_adjacente(no_atual)
+      for adj in adjcentes:
+        if adj not in visitados:
+          custo[adj]
+      visitados.append(no_atual)
+      no_atual = self.get_prox_no(no_atual)
+    print(custo)
+
+  def teste(self, distancia, vertice):
+    pass
+
 
   

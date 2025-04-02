@@ -50,23 +50,10 @@ def grafo_enron(graph):
     return graph
 
 #Questão 1 
-eron = Grafo()
-#eron = grafo_enron(eron)
-#eron.salva_grafo('grafo.txt')
-eron.carrega_grafo('grafo.txt')
+enron = Grafo()
+enron.carrega_grafo('grafo.txt')
+enron.print_grafo()
 
-#Questão 2
-#a)
-eron.get_ordem()
-#b)
-eron.get_tamanho()
-#c)
-eron.vertices_isolados()
-#d)
-
-#e)
-
-
-#Questão 3
-
-
+print(enron.get_adjacente('carlos.giron@psiusa.com'))
+print(enron.get_prox_no('carlos.giron@psiusa.com'))
+enron.dijkstra('carlos.giron@psiusa.com', 'mike.kotar@psiusa.com')
