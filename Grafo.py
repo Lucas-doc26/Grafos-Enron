@@ -206,5 +206,24 @@ class Grafo:
   def teste(self, distancia, vertice):
     pass
 
+    def euleriano(self): 
+      vertices_eulerianos = []
+      for vertice in self.corpo:
+        if (self.grau(vertice) % 2 == 0) and (self.grau_entrada(vertice) == self.grau_saida(vertice)):
+          if vertice not in vertices_eulerianos:
+            vertices_eulerianos.append(vertice)
+        else: 
+          return False
+      for vertice in vertices_eulerianos:
+        for i in range(self.grau_saida(vertice)):
+          last_vertice = vertice
+          current_vertice = 0 
+          while current_vertice != vertice:
+            for i in range(self.gra)
+            current_vertice = self.corpo[last_vertice][current_vertice][]
+      print(f"Os grafos eulerianos são: {vertices_eulerianos}")
+
+  
+
 
   
