@@ -79,3 +79,8 @@ enron.print_grafo()
 #Questão 2 
 
 
+# Questão 3
+
+is_euleriano, invalidations = enron.euleriano()
+
+print(f"\n\nO grafo é Euleriano? {is_euleriano} {f"\nErros: {invalidations}" if not(is_euleriano) else ""}")
