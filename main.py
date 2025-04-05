@@ -71,15 +71,22 @@ def grafo_enron(grafo):
 
 #Questão 1 
 enron = Grafo()
-#enron = grafo_enron(enron)
-#enron.print_grafo()
-#enron.salva_grafo('grafo.txt')
-enron.carrega_grafo('grafo_d.txt')
-#enron.print_grafo()
-enron.dijkstra('e@puc')
-#Questão 2 
+enron = grafo_enron(enron)
+enron.salva_grafo('grafo.txt')
+enron.print_grafo()
 
-#enron.carrega_grafo("grafo.txt")
-#$enron.dijkstra("office.chairman@enron.com")
+enron2 = Grafo()
+enron2.carrega_grafo('grafo.txt')
 
-####DFESISTO
+#Questão 2
+#a)
+enron2.get_ordem()
+#b)
+enron2.get_tamanho()
+
+
+#Questão 3
+
+
+#Questão 4
+enron2.lista_distancias(5, "jons@amerexenergy.com")
