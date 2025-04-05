@@ -12,7 +12,6 @@ class Grafo:
   def __str__(self):
     return self.imprime_lista()
     
-
   def get_ordem(self):
     print(f"A ordem do grafo é: {self.ordem}")
     return self.ordem
@@ -128,28 +127,33 @@ class Grafo:
           for vertice in self.vertices:
               adjacentes = self.corpo[vertice]
               if adjacentes:
-                  dados_formatados = [f'{aresta} ->' for aresta in adjacentes]
-                  f.write(f'{vertice}:{dados_formatados}\n')
+                  dados_formatados = [f"{aresta} ->" for aresta in adjacentes]
+                  f.write(f"{vertice}:{dados_formatados}\n")
               else:
-                  f.write(f'{vertice}:\n')
+                  f.write(f"{vertice}:\n")
           print("Grafo salvo com sucesso!")
 
   def carrega_grafo(self, caminho):
+      i = 0
       with open(caminho, 'r') as f:
           for linha in f:
-              remetente, conteudo = linha.split(":", 1)
-              destinatarios = re.findall(r"'(.*?)', (\d+)", conteudo)
-              emails = {remetente: [(email, int(numero)) for email, numero in destinatarios]}
-              
-              if emails[remetente]:
-                  for destinatario in emails[remetente]:
-                      pessoa, peso = destinatario
-                      self.add_aresta(remetente, pessoa, peso)
-              else:
-                  try:
-                      self.add_vertice(remetente)
-                  except:
-                      pass
+            remetente, conteudo = linha.split(":", 1) 
+            destinatarios = re.findall(r"'(.*?)', (\d+)", conteudo)
+
+            emails = {remetente: [(email, int(numero)) for email, numero in destinatarios]}
+            if emails[remetente]:
+                for destinatario in emails[remetente]:
+                  pessoa, peso = destinatario
+                  self.add_aresta(remetente, pessoa, peso)
+            else:
+                #se só tiver grau de entrada, eu tenho que add o vertice 
+                try:
+                  if remetente not in self.corpo.keys:
+                    self.add_vertice(remetente)
+                except:
+                  pass
+            i += 1
+      print(i)
 
   def vertices_isolados(self):
       isolados = [v for v in self.vertices if self.grau(v) == 0]
