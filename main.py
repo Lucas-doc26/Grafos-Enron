@@ -17,7 +17,6 @@ def formata(string):
     #/o=enron/ou=na/cn=recipients/cn=notesaddr/cn=a478079f-55e1f3b0-862566fa-612229@enron.com:
     return string
 
-
 def grafo_enron(grafo):
     base_path = 'Amostra Enron - 2016'
 
@@ -67,18 +66,16 @@ def grafo_enron(grafo):
 
     return grafo
 
-
-
 #print(formata('e-mail <.adams@enron.com>:'))
 
 #Questão 1 
 enron = Grafo()
-enron = grafo_enron(enron)
-enron.print_grafo()
-enron.salva_grafo('grafo.txt')
-#tam: 5821 / ordem: 
-
-#enron.carrega_grafo('grafo.txt')
+#enron = grafo_enron(enron)
 #enron.print_grafo()
-#tam: 5929 / ordem: 6061
+#enron.salva_grafo('grafo.txt')
+enron.carrega_grafo('grafo.txt')
+enron.print_grafo()
+
+#Questão 2 
+
 

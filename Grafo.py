@@ -91,9 +91,6 @@ class Grafo:
         for vizinho, _ in self.corpo[vertice1]:
           if vizinho == vertice2:
               return True
-        for vizinho, _ in self.corpo[vertice2]:
-            if vizinho == vertice1:
-                return True
         return False  
       raise ValueError("Vértice não existe!")
 
@@ -137,23 +134,14 @@ class Grafo:
       i = 0
       with open(caminho, 'r') as f:
           for linha in f:
-            remetente, conteudo = linha.split(":", 1) 
-            destinatarios = re.findall(r"'(.*?)', (\d+)", conteudo)
-
-            emails = {remetente: [(email, int(numero)) for email, numero in destinatarios]}
-            if emails[remetente]:
-                for destinatario in emails[remetente]:
-                  pessoa, peso = destinatario
-                  self.add_aresta(remetente, pessoa, peso)
-            else:
-                #se só tiver grau de entrada, eu tenho que add o vertice 
-                try:
-                  if remetente not in self.corpo.keys:
-                    self.add_vertice(remetente)
-                except:
-                  pass
-            i += 1
-      print(i)
+              remetente, conteudo = linha.split(":", 1)
+              destinatarios = re.findall(r"'(.*?)', (\d+)", conteudo)
+              emails = {remetente: [(email, int(numero)) for email, numero in destinatarios]}
+              
+              if emails[remetente]:
+                  for destinatario in emails[remetente]:
+                      pessoa, peso = destinatario
+                      self.add_aresta(remetente, pessoa, peso)
 
   def vertices_isolados(self):
       isolados = [v for v in self.vertices if self.grau(v) == 0]
@@ -202,22 +190,21 @@ class Grafo:
   def teste(self, distancia, vertice):
     pass
 
-    # def euleriano(self): 
-    #   vertices_eulerianos = []
+  def euleriano(self): 
+    isEulerian = True
+    for vertice in self.corpo:
+      if not((self.grau(vertice) % 2 == 0) and (self.grau_entrada(vertice) == self.grau_saida(vertice))):
+          print(vertice)
+          print( (self.grau_entrada(vertice),  self.grau_saida(vertice)))
+          isEulerian = False
+          return False
+    if isEulerian: # nao rodar desnecessariamente
+      return True
     #   for vertice in self.corpo:
-    #     if (self.grau(vertice) % 2 == 0) and (self.grau_entrada(vertice) == self.grau_saida(vertice)):
-    #       if vertice not in vertices_eulerianos:
-    #         vertices_eulerianos.append(vertice)
-    #     else: 
-    #       return False
-    #   for vertice in vertices_eulerianos:
-    #     for i in range(self.grau_saida(vertice)):
-    #       last_vertice = vertice
-    #       current_vertice = 0 
-    #       while current_vertice != vertice:
-    #         for i in range(self.gra)
-    #         current_vertice = self.corpo[last_vertice][current_vertice][]
-    #   print(f"Os grafos eulerianos são: {vertices_eulerianos}")
+
+    
+        
+    
 
   
 
