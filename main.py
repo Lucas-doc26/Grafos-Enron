@@ -3,7 +3,21 @@ from Grafo import *
 from email.parser import Parser
 from email.policy import default
 
-def grafo_enron(graph):
+def formata(string):
+    string = string.replace(" ", "")
+    if 'e-mail' or 'email' in string:
+        string = string.replace("e-mail", '')
+    if '<' or '>':
+        string = string.replace(">", '')
+        string = string.replace("<", '')
+    if string.startswith("."):
+        string = string[1:]
+    if "'" in string:
+        string = string.replace("'", '')
+    #/o=enron/ou=na/cn=recipients/cn=notesaddr/cn=a478079f-55e1f3b0-862566fa-612229@enron.com:
+    return string
+
+def grafo_enron(grafo):
     base_path = 'Amostra Enron - 2016'
 
     emails_dir = []
@@ -37,31 +51,31 @@ def grafo_enron(graph):
                 if remetente != None:
                     for destinario in pessoas:
                         destinario = destinario.strip()
+
+                        destinario = formata(destinario)
+                        remetente = formata(remetente)
                         #caso já possua uma aresta, ele vai mudar o peso, pegando o peso antigo e add mais um
                         #try/except pq gera uma exceção caso naõ exista as duas arestas 
                         try:
-                            if graph.tem_aresta(remetente, destinario):
-                                graph.add_aresta(remetente, destinario, (graph.get_peso(remetente, destinario) + 1 ))
+                            if grafo.tem_aresta(remetente, destinario):
+                                grafo.add_aresta(remetente, destinario, (grafo.get_peso(remetente, destinario) + 1 ))
                         except:
-                            graph.add_aresta(remetente, destinario, 1 )
+                            grafo.add_aresta(remetente, destinario, 1 )
         
         del email_dir, f 
 
-    return graph
+    return grafo
+
+#print(formata('e-mail <.adams@enron.com>:'))
 
 #Questão 1 
 enron = Grafo()
-enron.carrega_grafo('grafo-euleriano.txt')
+#enron = grafo_enron(enron)
+#enron.print_grafo()
+#enron.salva_grafo('grafo.txt')
+enron.carrega_grafo('grafo.txt')
 enron.print_grafo()
 
-print(enron.ordem, 
-enron.tamanho)
-
-# print("------------------------------")
-# print(enron)
-# print(enron.euleriano())
+#Questão 2 
 
 
-# print(enron.get_adjacente('carlos.giron@psiusa.com'))
-# print(enron.get_prox_no('carlos.giron@psiusa.com'))
-# enron.dijkstra('carlos.giron@psiusa.com', 'mike.kotar@psiusa.com')

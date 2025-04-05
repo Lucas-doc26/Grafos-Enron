@@ -12,7 +12,6 @@ class Grafo:
   def __str__(self):
     return self.imprime_lista()
     
-
   def get_ordem(self):
     print(f"A ordem do grafo é: {self.ordem}")
     return self.ordem
@@ -95,7 +94,6 @@ class Grafo:
         return False  
       raise ValueError("Vértice não existe!")
 
-
   def grau_entrada(self, vertice):
     grau_entrada = 0
     if vertice in self.vertices:
@@ -126,13 +124,14 @@ class Grafo:
           for vertice in self.vertices:
               adjacentes = self.corpo[vertice]
               if adjacentes:
-                  dados_formatados = [f'{aresta} ->' for aresta in adjacentes]
-                  f.write(f'{vertice}:{dados_formatados}\n')
+                  dados_formatados = [f"{aresta} ->" for aresta in adjacentes]
+                  f.write(f"{vertice}:{dados_formatados}\n")
               else:
-                  f.write(f'{vertice}:\n')
+                  f.write(f"{vertice}:\n")
           print("Grafo salvo com sucesso!")
 
   def carrega_grafo(self, caminho):
+      i = 0
       with open(caminho, 'r') as f:
           for linha in f:
               remetente, conteudo = linha.split(":", 1)
@@ -190,7 +189,6 @@ class Grafo:
 
   def teste(self, distancia, vertice):
     pass
-
 
   def euleriano(self): 
     isEulerian = True
