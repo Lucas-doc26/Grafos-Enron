@@ -4,6 +4,9 @@ from email.parser import Parser
 from email.policy import default
 
 def formata(string):
+    """
+    Está formatando os emails que estavam com caracteres inválidos
+    """
     string = string.replace(" ", "")
     if 'e-mail' or 'email' in string:
         string = string.replace("e-mail", '')
@@ -12,9 +15,9 @@ def formata(string):
         string = string.replace("<", '')
     if string.startswith("."):
         string = string[1:]
+        #tirando o . 
     if "'" in string:
         string = string.replace("'", '')
-    #/o=enron/ou=na/cn=recipients/cn=notesaddr/cn=a478079f-55e1f3b0-862566fa-612229@enron.com:
     return string
 
 def grafo_enron(grafo):
@@ -66,16 +69,17 @@ def grafo_enron(grafo):
 
     return grafo
 
-#print(formata('e-mail <.adams@enron.com>:'))
-
 #Questão 1 
 enron = Grafo()
 #enron = grafo_enron(enron)
 #enron.print_grafo()
 #enron.salva_grafo('grafo.txt')
-enron.carrega_grafo('grafo.txt')
-enron.print_grafo()
-
+enron.carrega_grafo('grafo_d.txt')
+#enron.print_grafo()
+enron.dijkstra('e@puc')
 #Questão 2 
 
+#enron.carrega_grafo("grafo.txt")
+#$enron.dijkstra("office.chairman@enron.com")
 
+####DFESISTO

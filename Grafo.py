@@ -131,7 +131,6 @@ class Grafo:
           print("Grafo salvo com sucesso!")
 
   def carrega_grafo(self, caminho):
-      i = 0
       with open(caminho, 'r') as f:
           for linha in f:
               remetente, conteudo = linha.split(":", 1)
@@ -162,33 +161,79 @@ class Grafo:
     if no not in self.corpo:
       raise ValueError("Esse nó não existe!")
     else:
-      return self.corpo[no]
+      adjs = []
+      for v in self.corpo[no]:
+        adjs.append(v)   
+      return adjs
 
-  def get_prox_no(self, no):
-    adjacentes = self.get_adjacente(no)
-    menor = [None, 0]
-    for adj in adjacentes:
-      if adj[1] > menor[1]:
-        menor = adj
-    return menor
+  def get_prox_no(self, adjs, visitados):
+    menor = [None, np.inf]
+    for adj in adjs:
+      if adj[0] not in visitados:
+        if adj[1] < menor[1]:
+          menor = adj
+    if menor[0] != None: 
+      return menor[0]
+    else:
+      return None
 
-  def dijkstra(self, no_origem, no_destino):
+  def adj(self, no_origem):
+    no = self.get_adjacente(no_origem)
+    print(self.get_prox_no(no, [])) 
+
+  def dijkstra(self, no_origem):
+    pilha = [] #pilha de controle de quais já foram visitados 
+    custo = {vertice: [-1, None] for vertice in self.corpo} #dic dos custos
     visitados = []
-    custo = [([np.inf, None], [np.inf, None]) for i in range(self.ordem)] #crio uma lista de custos, 
-    custo[0] = no_origem, 0
-    custo.index(no_origem)
+    custo[no_origem][0] =  0 #setando o nó de origem como custo igual a 0
     no_atual = no_origem
-    while no_destino not in visitados:
-      adjcentes = self.get_adjacente(no_atual)
-      for adj in adjcentes:
-        if adj not in visitados:
-          custo[adj]
-      visitados.append(no_atual)
-      no_atual = self.get_prox_no(no_atual)
+
+    
+    while len(visitados) != len(self.corpo):
+      #todos os adjs de um nó
+      #print(no_atual)
+      try:
+        adjcentes = self.get_adjacente(no_atual)
+        #print(f"Nó atual: {no_atual}")
+        for adj in adjcentes:
+          if adj[0] not in visitados:
+            peso_aresta = self.get_peso(no_atual, adj[0])
+            peso_acumulado = custo[no_atual][0]
+            peso = peso_acumulado + peso_aresta
+            #print(f"{adj[0]} = {peso} ({peso_acumulado} + {peso_aresta})")
+            #comparando o peso acumulado com o peso
+            if custo[adj[0]][0] == -1 or custo[adj[0]][0] > peso:
+              custo[adj[0]][0] = peso
+              custo[adj[0]][1] = no_atual
+
+        visitados.append(no_atual)
+        pilha.append(no_atual)
+
+        #no anterior para controle
+        no_anterior = no_atual
+        no_atual = self.get_prox_no(adjcentes, visitados)
+
+        #caso o no não tenha adjs que não foram visitados, ele volta para o nó anterior
+        # o nó anterior ele pega pela pilha de controle
+
+
+        #mudar daqui para baixo
+        if no_atual == None:
+          pilha.remove(no_anterior)
+          for no in reversed(pilha):
+            adjs = self.get_adjacente(no)
+            for adj in adjs:
+              if adj not in visitados:
+                  no_selecionado = no
+                  print(no_selecionado)
+                  break
+          no_atual = self.get_prox_no(self.get_adjacente(no_selecionado), visitados)
+      except:
+        pass
+
+    custo = {chave: valor for chave, valor in custo.items() if valor != [-1, None]}
     print(custo)
 
-  def teste(self, distancia, vertice):
-    pass
 
   def euleriano(self): 
     isEulerian = True
