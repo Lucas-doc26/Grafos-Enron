@@ -84,9 +84,14 @@ enron2.get_ordem()
 #b)
 enron2.get_tamanho()
 
-
-#Questão 3
-
+# Questão 3
+is_euleriano, invalidations = enron.euleriano()
+if is_euleriano:
+    print(f"\nO grafo é Euleriano? {is_euleriano}")
+else:
+    print(f"\nO grafo é Euleriano? {is_euleriano}\nErros: {invalidations}")
 
 #Questão 4
 enron2.lista_distancias(5, "jons@amerexenergy.com")
+
+

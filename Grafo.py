@@ -244,19 +244,65 @@ class Grafo:
   def lista_distancias(self, distancia, no):
     lista = self.dijkstra(no)
     lista = [chave for chave, valor in lista.items() if valor[0] <= distancia]
-    print(f'Os respectivos vértices estão com uma distância a baixo de {distancia}: {lista}')
+    print(f'\nOs respectivos vértices estão com uma distância a baixo de {distancia}: {lista}')
+
+  def dfs_iterative(self, source_node):
+    visited = []
+    stack = []
+
+    stack.append(source_node)
+
+    while len(stack) > 0:
+      element = stack.pop()
+
+      if element not in visited:
+        print(element)
+        visited.append(element)
+
+        for (adj,_) in self.corpo[element]:
+          print(adj)
+          if adj not in visited:
+            stack.append(adj)
+    return visited
 
   def euleriano(self): 
-    isEulerian = True
+    """
+    Valida se o grafo é euleriano. Primeiro valida a se o grau total é par; depois se o grau de entrada e o de saída
+      do vertice sao iguais; e por fim, se o grafo eh conexo.
+
+    Returns:
+        bool|str: Retora True se o grafo for euleriano, ou retorna as strings de erro,
+          informando quais os problemas do grafo.:
+          - "O grau total de um vertice nao é par"
+          - "Há um ou mais vertices com grau de entrada diferente do de saída"
+          - "O grafo nao é conexo"
+    """
+
+    invalidations = []
+    # mensagem de erro
+    degree_is_not_even = "O grau total de um vertice nao é par"
+    degree_in_diff_out = "Há um ou mais vertices com grau de entrada diferente do de saída"
+    graph_is_weak = "O grafo nao é conexo"
+
+    eulerian_validation = True
     for vertice in self.corpo:
-      if not((self.grau(vertice) % 2 == 0) and (self.grau_entrada(vertice) == self.grau_saida(vertice))):
-          print(vertice)
-          print( (self.grau_entrada(vertice),  self.grau_saida(vertice)))
-          isEulerian = False
-          return False
-    if isEulerian: # nao rodar desnecessariamente
-      return True
-    #   for vertice in self.corpo:
+      if not((self.grau(vertice) % 2 == 0)): # grau nao ser par
+        eulerian_validation = False
+        invalidations.append(degree_is_not_even) if degree_is_not_even not in invalidations else None # texto de erro grau nao ser par
+        if not(self.grau_entrada(vertice) == self.grau_saida(vertice)): # grau in != out
+          invalidations.append(degree_in_diff_out) if degree_in_diff_out not in invalidations else None #  texto erro in != out
+
+
+    dfs = self.dfs_iterative(self.vertices[len(self.vertices) -1]) # verifica se o grafo é conexo
+    eulerian_validation = sorted(dfs) == sorted(self.vertices)
+
+    invalidations.append(graph_is_weak) if not(eulerian_validation) else None # texto erro de nao convexo
+
+    error_message = ""
+    for i, invalidation in enumerate(invalidations):
+        error_message += (invalidation + ", " if i < len(invalidations) - 1 else invalidation)
+
+    return eulerian_validation, error_message
 
     
         
