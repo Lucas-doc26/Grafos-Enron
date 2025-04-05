@@ -51,9 +51,17 @@ def grafo_enron(graph):
 
 #Questão 1 
 enron = Grafo()
-enron.carrega_grafo('grafo.txt')
+enron.carrega_grafo('grafo-euleriano.txt')
 enron.print_grafo()
 
-print(enron.get_adjacente('carlos.giron@psiusa.com'))
-print(enron.get_prox_no('carlos.giron@psiusa.com'))
-enron.dijkstra('carlos.giron@psiusa.com', 'mike.kotar@psiusa.com')
+print(enron.ordem, 
+enron.tamanho)
+
+# print("------------------------------")
+# print(enron)
+# print(enron.euleriano())
+
+
+# print(enron.get_adjacente('carlos.giron@psiusa.com'))
+# print(enron.get_prox_no('carlos.giron@psiusa.com'))
+# enron.dijkstra('carlos.giron@psiusa.com', 'mike.kotar@psiusa.com')

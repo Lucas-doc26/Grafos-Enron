@@ -92,11 +92,9 @@ class Grafo:
         for vizinho, _ in self.corpo[vertice1]:
           if vizinho == vertice2:
               return True
-        for vizinho, _ in self.corpo[vertice2]:
-            if vizinho == vertice1:
-                return True
         return False  
       raise ValueError("Vértice não existe!")
+
 
   def grau_entrada(self, vertice):
     grau_entrada = 0
@@ -145,11 +143,6 @@ class Grafo:
                   for destinatario in emails[remetente]:
                       pessoa, peso = destinatario
                       self.add_aresta(remetente, pessoa, peso)
-              else:
-                  try:
-                      self.add_vertice(remetente)
-                  except:
-                      pass
 
   def vertices_isolados(self):
       isolados = [v for v in self.vertices if self.grau(v) == 0]
@@ -198,22 +191,22 @@ class Grafo:
   def teste(self, distancia, vertice):
     pass
 
-    # def euleriano(self): 
-    #   vertices_eulerianos = []
+
+  def euleriano(self): 
+    isEulerian = True
+    for vertice in self.corpo:
+      if not((self.grau(vertice) % 2 == 0) and (self.grau_entrada(vertice) == self.grau_saida(vertice))):
+          print(vertice)
+          print( (self.grau_entrada(vertice),  self.grau_saida(vertice)))
+          isEulerian = False
+          return False
+    if isEulerian: # nao rodar desnecessariamente
+      return True
     #   for vertice in self.corpo:
-    #     if (self.grau(vertice) % 2 == 0) and (self.grau_entrada(vertice) == self.grau_saida(vertice)):
-    #       if vertice not in vertices_eulerianos:
-    #         vertices_eulerianos.append(vertice)
-    #     else: 
-    #       return False
-    #   for vertice in vertices_eulerianos:
-    #     for i in range(self.grau_saida(vertice)):
-    #       last_vertice = vertice
-    #       current_vertice = 0 
-    #       while current_vertice != vertice:
-    #         for i in range(self.gra)
-    #         current_vertice = self.corpo[last_vertice][current_vertice][]
-    #   print(f"Os grafos eulerianos são: {vertices_eulerianos}")
+
+    
+        
+    
 
   
 
