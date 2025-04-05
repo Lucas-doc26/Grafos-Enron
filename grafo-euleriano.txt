@@ -1,5 +1,0 @@
-randy.pais@enron.com:[['elizabeth.labanowski@enron.com', 7] ->, ['hoytm@hughesluce.com', 1] ->]
-hoytm@hughesluce.com:[['mcominsky@aol.com', 3] ->, ['randy.pais@enron.com', 1] ->]
-thenninger@mail.law.utexas.edu:[['elizabeth.labanowski@enron.com', 7] ->, ['mcominsky@aol.com', 1] ->]
-elizabeth.labanowski@enron.com:[['randy.pais@enron.com', 7] ->, ['thenninger@mail.law.utexas.edu', 7] ->]
-mcominsky@aol.com:[['hoytm@hughesluce.com', 3] ->, ['thenninger@mail.law.utexas.edu', 1] ->]
