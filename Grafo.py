@@ -1,6 +1,10 @@
 import re
 import numpy as np
 from collections import defaultdict
+import os
+from email.parser import Parser
+from email.policy import default
+
 
 class Grafo:
   def __init__(self):
@@ -64,7 +68,6 @@ class Grafo:
           print(vertice, ":", self.corpo[vertice])
       print("Ordem do grafo:", self.ordem)
       print("Tamanho do grafo:", self.tamanho)
-
 
   def remove_aresta(self, vertice1, vertice2):
       if vertice1 in self.vertices:
@@ -145,16 +148,26 @@ class Grafo:
       self.print_grafo()
 
   def vertices_isolados(self):
-      isolados = [v for v in self.vertices if self.grau(v) == 0]
-      print(f"Os vértices isolados são: {isolados}")
+    isolados = [v for v in self.vertices if self.grau(v) == 0]
+    print(f"{len(isolados)} vértices isolados: {isolados}")
 
-  # Demais métodos mantidos com lógica similar...
+  def highest_outdegrees(self):
+    rank = []
+    for node in self.vertices:
+        grau = self.grau_saida(node)
+        rank.append([grau, node])
 
-  #Implemente um método que retorne uma lista com todos os vértices que
-  #estão localizados até uma distância D de um vértice N, em que D é a soma dos
-  #pesos ao longo do caminho mais curto entre dois vértices. A implementação deve
-  #ser eficiente o suficiente para lidar com grafos com milhares de vértices e arestas
-  #sem exceder limites razoáveis de tempo e memória.
+    rank.sort(reverse=True)
+    return rank[:20]
+
+  def highest_indegrees(self):
+    rank = []
+    for node in self.vertices:
+        grau = self.grau_entrada(node)
+        rank.append([grau, node])
+
+    rank.sort(reverse=True)
+    return rank[:20]
 
   def return_no(self, nome):
     return self.corpo[nome]
@@ -303,12 +316,91 @@ class Grafo:
         error_message += (invalidation + ", " if i < len(invalidations) - 1 else invalidation)
 
     return eulerian_validation, error_message
-
-    
-        
-    
-
   
+  def diametro(self):
+        maiores_custos = []
+        for node in self.vertices:
+            lista = self.dijkstra(node)
+            chave_maxima, valor_maximo = max(lista.items(), key=lambda item: item[1][0])
 
+            caminho_maximo = [chave_maxima]
+            no_atual = chave_maxima
+            while no_atual != node:
+                predecessor = lista[no_atual][1]
+                if predecessor is None:
+                    break
+                caminho_maximo.append(predecessor)
+                no_atual = predecessor
+
+            caminho_maximo.reverse()
+            maiores_custos.append([valor_maximo[0], caminho_maximo])
+
+        return max(maiores_custos, key=lambda item: item[0])
+
+def grafo_enron(grafo):
+    base_path = 'Amostra Enron - 2016'
+
+    emails_dir = []
+    for dir in os.listdir(base_path):
+        sub_dir = os.path.join(base_path, dir) #'Amostra Enron - 2016/cuilla-m'
+
+        if os.path.isdir(sub_dir):
+            for dir_emails in os.listdir(sub_dir):
+                emails = os.path.join(sub_dir, dir_emails) #'Amostra Enron - 2016/cuilla-m/10-fantasay'
+
+                for email in os.listdir(emails):
+                    email_path = os.path.join(emails, email)  # caminho do email
+                    
+                    if os.path.isdir(email_path):  # pode ter outras pastas dentro
+                        for m in os.listdir(email_path):
+                            dir_email = os.path.join(email_path, m)  
+                            emails_dir.append(dir_email)
+                    else:
+                        emails_dir.append(email_path)
+
+    for email_dir in emails_dir:
+        with open(email_dir, "r", encoding="cp1252") as f:
+            conteudo_email = f.read()
+            headers = Parser(policy=default).parsestr(conteudo_email)
+            remetente = headers["From"] or headers["from"]
+            remetente = remetente.strip() #remove os espaços em branco: "  lucas@pucpr.edu.br " -> "lucas@pucpr.edu.br"
+            destinarios = headers["To"] or headers["to"]
+            if destinarios != None:
+                # caso o email seja para mais de uma pessoa, ele vai me retornar a lista
+                pessoas = destinarios.split(',')
+                if remetente != None:
+                    for destinario in pessoas:
+                        destinario = destinario.strip()
+
+                        destinario = formata(destinario)
+                        remetente = formata(remetente)
+                        #caso já possua uma aresta, ele vai mudar o peso, pegando o peso antigo e add mais um
+                        #try/except pq gera uma exceção caso naõ exista as duas arestas 
+                        try:
+                            if grafo.tem_aresta(remetente, destinario):
+                                grafo.add_aresta(remetente, destinario, (grafo.get_peso(remetente, destinario) + 1 ))
+                        except:
+                            grafo.add_aresta(remetente, destinario, 1 )
+        
+        del email_dir, f 
+
+    return grafo
+
+def formata(string):
+    """
+    Está formatando os emails que estavam com caracteres inválidos
+    """
+    string = string.replace(" ", "")
+    if 'e-mail' or 'email' in string:
+        string = string.replace("e-mail", '')
+    if '<' or '>':
+        string = string.replace(">", '')
+        string = string.replace("<", '')
+    if string.startswith("."):
+        string = string[1:]
+        #tirando o . 
+    if "'" in string:
+        string = string.replace("'", '')
+    return string
 
   
