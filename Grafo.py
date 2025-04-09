@@ -4,7 +4,7 @@ from collections import defaultdict
 import os
 from email.parser import Parser
 from email.policy import default
-
+import heapq
 
 class Grafo:
   def __init__(self):
@@ -181,6 +181,10 @@ class Grafo:
         adjs.append(v)   
       return adjs
 
+  def adj(self, no_origem):
+    no = self.get_adjacente(no_origem)
+    print(self.get_prox_no(no, [])) 
+
   def get_prox_no(self, adjs, visitados):
     menor = [None, np.inf]
     for adj in adjs:
@@ -191,11 +195,33 @@ class Grafo:
       return menor[0]
     else:
       return None
+  
+  def dijkstra2(self, no_origem):
+    visitados = []
+    #crio um dic com a estrutura: Vertice - Peso Acumulado, Antecessor
+    distancia = {vertice: [np.inf, None] for vertice in self.corpo}
+    distancia[no_origem][0] = 0 
+    custo = [(0, no_origem)] #add o nó de origem ao custo
+    
+    while custo:
+      peso_acumulado, no_atual = heapq.heappop(custo)
+      print(no_atual)
+      #pego os vertíces adjs ao no atual
+      adjacentes = self.get_adjacente(no_atual)
+      for vertice, peso_aresta in adjacentes:
+        if vertice not in visitados:
+          peso = peso_acumulado + peso_aresta
+          if peso < distancia[vertice][0]:
+            distancia[vertice] = peso, no_atual
+            heapq.heappush(custo, (peso, vertice)) #add o vertice adj e seu peso a lista de custos
+      #visitados.append(vertice)
+    
+    nos_nao_alcancados = [v for v in distancia if distancia[v] == [np.inf, None]]
+    for v in nos_nao_alcancados:
+      distancia.pop(v)
 
-  def adj(self, no_origem):
-    no = self.get_adjacente(no_origem)
-    print(self.get_prox_no(no, [])) 
-
+    return distancia
+  
   def dijkstra(self, no_origem):
     controle = [] #estrutura para controle
     custo = {vertice: [-1, None] for vertice in self.corpo} #dic de cada custo
@@ -250,7 +276,7 @@ class Grafo:
             print("Erro:", e)
             break
 
-    custo = {chave: valor for chave, valor in custo.items() if valor != [-1, None]}
+    custo = {chave: valor for chave, valor in sorted(custo.items()) if valor != [-1, None]}
     #print(custo)
     return custo
 
