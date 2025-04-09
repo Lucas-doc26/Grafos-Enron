@@ -17,22 +17,20 @@ enron2.get_tamanho()
 #c)
 enron2.vertices_isolados()
 #d)
-#print(enron2.highest_outdegrees(), "\n")
+print(enron2.highest_outdegrees(), "\n")
 #e)
-#print(enron2.highest_indegrees())
+print(enron2.highest_indegrees())
 
-print(enron2.dijkstra2("daniel.muschar@enron.com"))
 # Questão 3
-"""is_euleriano, invalidations = enron2.euleriano()
+is_euleriano, invalidations = enron2.euleriano()
 if is_euleriano:
     print(f"\nO grafo é Euleriano? {is_euleriano}")
 else:
-    print(f"\nO grafo é Euleriano? {is_euleriano}\nErros: {invalidations}")"""
+    print(f"\nO grafo é Euleriano? {is_euleriano}\nErros: {invalidations}")
 
 #Questão 4
-"""print(enron2.dijkstra('daniel.muschar@enron.com'))
-enron2.lista_distancias(5, "jons@amerexenergy.com")
+enron2.lista_distancias(1, "jons@amerexenergy.com")
 
 #Questão 5
-print(enron2.diametro())"""
+print(enron2.diametro())
 

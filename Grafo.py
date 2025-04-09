@@ -196,7 +196,7 @@ class Grafo:
     else:
       return None
   
-  def dijkstra2(self, no_origem):
+  def dijkstra(self, no_origem):
     visitados = []
     #crio um dic com a estrutura: Vertice - Peso Acumulado, Antecessor
     distancia = {vertice: [np.inf, None] for vertice in self.corpo}
@@ -222,64 +222,6 @@ class Grafo:
 
     return distancia
   
-  def dijkstra(self, no_origem):
-    controle = [] #estrutura para controle
-    custo = {vertice: [-1, None] for vertice in self.corpo} #dic de cada custo
-    visitados = []
-    custo[no_origem][0] = 0
-    no_atual = no_origem
-
-    while len(visitados) != len(self.corpo):
-        try:
-            adjacentes = self.get_adjacente(no_atual)
-            for adj in adjacentes:
-                if adj[0] not in visitados:
-                    peso_aresta = self.get_peso(no_atual, adj[0])
-                    peso_acumulado = custo[no_atual][0]
-                    peso = peso_acumulado + peso_aresta
-                    if custo[adj[0]][0] == -1 or custo[adj[0]][0] > peso:
-                        custo[adj[0]][0] = peso
-                        custo[adj[0]][1] = no_atual
-
-            visitados.append(no_atual)
-            controle.append(no_atual)
-
-            no_anterior = no_atual
-            no_atual = self.get_prox_no(adjacentes, visitados)
-
-            #caso seja None, tenho que voltar para o meu anterior 
-            if no_atual is None:
-                controle.remove(no_anterior)
-                no_selecionado = None
-                #percorrer ao contrário
-                for no in reversed(controle):
-                    adjs = self.get_adjacente(no)
-                    for adj in adjs:
-                        
-                        #caso os adjs do meu anterior não tenham sido visitados,
-                        #vou selecionar eles 
-                        if adj[0] not in visitados:
-                            no_selecionado = no
-                            break #quebrando pq achei oq não foi visitado
-                            
-                    if no_selecionado is not None:
-                        break #quebrando o laço pq achei oq não foi visitado ainda 
-
-                if no_selecionado is not None:
-                    no_atual = self.get_prox_no(self.get_adjacente(no_selecionado), visitados)
-                    #pego meu adj ao no selecionado
-                else:
-                    break  # se ele for None até aqui, não tenho mais conexões 
-                            # ou seja, não posso ir, ele é desconexo
-
-        except Exception as e:
-            print("Erro:", e)
-            break
-
-    custo = {chave: valor for chave, valor in sorted(custo.items()) if valor != [-1, None]}
-    #print(custo)
-    return custo
-
   def lista_distancias(self, distancia, no):
     lista = self.dijkstra(no)
     lista = [chave for chave, valor in lista.items() if valor[0] <= distancia]
