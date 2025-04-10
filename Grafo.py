@@ -259,17 +259,13 @@ class Grafo:
 
     invalidations = []
     # mensagem de erro
-    degree_is_not_even = "O grau total de um vertice nao é par"
     degree_in_diff_out = "Há um ou mais vertices com grau de entrada diferente do de saída"
     graph_is_weak = "O grafo nao é conexo"
 
     eulerian_validation = True
     for vertice in self.corpo:
-      if not((self.grau(vertice) % 2 == 0)): # grau nao ser par
-        eulerian_validation = False
-        invalidations.append(degree_is_not_even) if degree_is_not_even not in invalidations else None # texto de erro grau nao ser par
-        if not(self.grau_entrada(vertice) == self.grau_saida(vertice)): # grau in != out
-          invalidations.append(degree_in_diff_out) if degree_in_diff_out not in invalidations else None #  texto erro in != out
+      if not(self.grau_entrada(vertice) == self.grau_saida(vertice)): # grau in != out
+        invalidations.append(degree_in_diff_out) if degree_in_diff_out not in invalidations else None #  texto erro in != out
 
 
     dfs = self.dfs_iterative(self.vertices[len(self.vertices) -1]) # verifica se o grafo é conexo
@@ -278,7 +274,7 @@ class Grafo:
     invalidations.append(graph_is_weak) if not(eulerian_validation) else None # texto erro de nao convexo
 
     error_message = ""
-    for i, invalidation in enumerate(invalidations):
+    for i, invalidation in enumerate(invalidations): # enumerate para pegar index no i
         error_message += (invalidation + ", " if i < len(invalidations) - 1 else invalidation)
 
     return eulerian_validation, error_message
