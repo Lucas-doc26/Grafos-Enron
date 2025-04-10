@@ -8,6 +8,7 @@ from Grafo import *
 
 enron2 = Grafo()
 enron2 = grafo_enron(enron2)
+enron2.salva_grafo('grafo.txt')
 enron2.carrega_grafo('grafo.txt')
 
 #Questão 2
@@ -16,11 +17,11 @@ enron2.get_ordem()
 #b)
 enron2.get_tamanho()
 #c)
-#enron2.vertices_isolados()
+enron2.vertices_isolados()
 #d)
-#print(enron2.highest_outdegrees(), "\n")
+print(enron2.highest_outdegrees(), "\n")
 #e)
-#print(enron2.highest_indegrees())
+print(enron2.highest_indegrees())
 
 # Questão 3
 is_euleriano, invalidations = enron2.euleriano()

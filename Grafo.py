@@ -304,14 +304,28 @@ class Grafo:
         return max(maiores_custos, key=lambda item: item[0])
 
 def grafo_enron(grafo):
+    """
+    Retorna o grafo do Enron
+    """
     base_path = 'Amostra Enron - 2016'
-    
-    emails_dir = []
 
-    for root, _, files in os.walk(base_path):
-        for file in files:
-            email_path = os.path.join(root, file)
-            emails_dir.append(email_path)
+    emails_dir = []
+    for dir in os.listdir(base_path):
+        sub_dir = os.path.join(base_path, dir) #'Amostra Enron - 2016/cuilla-m'
+
+        if os.path.isdir(sub_dir):
+            for dir_emails in os.listdir(sub_dir):
+                emails = os.path.join(sub_dir, dir_emails) #'Amostra Enron - 2016/cuilla-m/10-fantasay'
+
+                for email in os.listdir(emails):
+                    email_path = os.path.join(emails, email)  # caminho do email
+                    
+                    if os.path.isdir(email_path):  # pode ter outras pastas dentro
+                        for m in os.listdir(email_path):
+                            dir_email = os.path.join(email_path, m)  
+                            emails_dir.append(dir_email)
+                    else:
+                        emails_dir.append(email_path)
 
     for email_dir in emails_dir:
         with open(email_dir, "r", encoding="cp1252") as f:
@@ -323,12 +337,10 @@ def grafo_enron(grafo):
                 # caso o email seja para mais de uma pessoa, ele vai me retornar a lista
                 if ',' in destinarios:
                   pessoas = destinarios.split(',')
-                elif ";" in destinarios:
-                  pessoas = destinarios.split(';')
                 else:
-                  pessoas = destinarios
+                  pessoas = [destinarios] #coloca somente uma pessoa na lista
                 if remetente != None:
-                    remetente = remetente.strip() #remove os espaços em branco: "  lucas@pucpr.edu.br " -> "lucas@pucpr.edu.br"
+                    remetente = remetente.strip() #remove os espaços em branco: "  joao@pucpr.edu.br " -> "joao@pucpr.edu.br"
 
                     for destinario in pessoas:
                         destinario = destinario.strip()
@@ -341,13 +353,14 @@ def grafo_enron(grafo):
                             if grafo.tem_aresta(remetente, destinario):
                                 grafo.add_aresta(remetente, destinario, (grafo.get_peso(remetente, destinario) + 1 ))
                             else:
+                                # pode ser que o r/d existam mas não tenham aresta
                                 grafo.add_aresta(remetente, destinario, 1 )
                         except:
                             grafo.add_aresta(remetente, destinario, 1 )
             
 
         
-        #del email_dir, f 
+        del email_dir, f 
     return grafo
 
 def formata(string):
