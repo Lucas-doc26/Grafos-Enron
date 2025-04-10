@@ -206,7 +206,6 @@ class Grafo:
     
     while custo:
       peso_acumulado, no_atual = heapq.heappop(custo)
-      print(no_atual)
       #pego os vertíces adjs ao no atual
       adjacentes = self.get_adjacente(no_atual)
       for vertice, peso_aresta in adjacentes:
@@ -238,11 +237,9 @@ class Grafo:
       element = stack.pop()
 
       if element not in visited:
-        print(element)
         visited.append(element)
 
         for (adj,_) in self.corpo[element]:
-          print(adj)
           if adj not in visited:
             stack.append(adj)
     return visited
