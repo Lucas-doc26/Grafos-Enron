@@ -19,9 +19,9 @@ enron2.get_tamanho()
 #c)
 enron2.vertices_isolados()
 #d)
-print(enron2.highest_outdegrees(), "\n")
+print(f"\nOs seguintes vértices possuem os maiores graus de saída: {enron2.highest_outdegrees()}")
 #e)
-print(enron2.highest_indegrees())
+print(f"\nOs seguintes vértices possuem os maiores graus de entrada: {enron2.highest_indegrees()}")
 
 # Questão 3
 is_euleriano, invalidations = enron2.euleriano()
@@ -34,5 +34,5 @@ else:
 enron2.lista_distancias(5, "jared.kaiser@enron.com")
 
 #Questão 5
-print(enron2.diametro())
+print(f"\nO diametro do grafo é: {enron2.diametro()}")
 

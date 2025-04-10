@@ -17,11 +17,11 @@ class Grafo:
     return self.imprime_lista()
     
   def get_ordem(self):
-    print(f"A ordem do grafo é: {self.ordem}")
+    print(f"\nA ordem do grafo é: {self.ordem}")
     return self.ordem
 
   def get_tamanho(self):
-    print(f"O tamanho do grafo é: {self.tamanho}")
+    print(f"\nO tamanho do grafo é: {self.tamanho}")
     return self.tamanho
 
   def add_vertice(self, nome):
@@ -66,8 +66,8 @@ class Grafo:
   def print_grafo(self):
       for vertice in self.vertices:
           print(vertice, ":", self.corpo[vertice])
-      print("Ordem do grafo:", self.ordem)
-      print("Tamanho do grafo:", self.tamanho)
+      #print("Ordem do grafo:", self.ordem)
+      #print("Tamanho do grafo:", self.tamanho)
 
   def remove_aresta(self, vertice1, vertice2):
       if vertice1 in self.vertices:
@@ -139,9 +139,10 @@ class Grafo:
   def carrega_grafo(self, caminho):
       with open(caminho, 'r') as f:
           for linha in f:
-              remetente, conteudo = linha.split(":", 1)
-              destinatarios = re.findall(r"'(.*?)', (\d+)", conteudo)
-              emails = {remetente: [(email, int(numero)) for email, numero in destinatarios]}
+              #lendo cada linha do arquivo e pegando o remetente e os destinatarios
+              remetente, conteudo = linha.split(":", 1)#spli assim por conta de joao: [[''],['']]
+              destinatarios = re.findall(r"'(.*?)', (\d+)", conteudo) #separando por qualquer coisa entre '' e um decimal
+              emails = {remetente: [(email, int(numero)) for email, numero in destinatarios]} #formatando em dic 
               
               if emails[remetente]:
                   for destinatario in emails[remetente]:
@@ -151,9 +152,12 @@ class Grafo:
 
   def vertices_isolados(self):
     isolados = [v for v in self.vertices if self.grau(v) == 0]
-    print(f"{len(isolados)} vértices isolados: {isolados}")
+    print(f"\n{len(isolados)} vértices isolados: {isolados}")
 
   def highest_outdegrees(self):
+    """
+    Pega os 20 maiores graus de saída 
+    """
     rank = []
     for node in self.vertices:
         grau = self.grau_saida(node)
@@ -163,6 +167,9 @@ class Grafo:
     return rank[:20]
 
   def highest_indegrees(self):
+    """
+    Pega os 20 maiores graus de entrada
+    """
     rank = []
     for node in self.vertices:
         grau = self.grau_entrada(node)
@@ -175,6 +182,9 @@ class Grafo:
     return self.corpo[nome]
 
   def get_adjacente(self, no):
+    """
+    Retorna uma lista de adjacentes 
+    """
     if no not in self.corpo:
       raise ValueError("Esse nó não existe!")
     else:
@@ -183,40 +193,24 @@ class Grafo:
         adjs.append(v)   
       return adjs
 
-  def adj(self, no_origem):
-    no = self.get_adjacente(no_origem)
-    print(self.get_prox_no(no, [])) 
-
-  def get_prox_no(self, adjs, visitados):
-    menor = [None, np.inf]
-    for adj in adjs:
-      if adj[0] not in visitados:
-        if adj[1] < menor[1]:
-          menor = adj
-    if menor[0] != None: 
-      return menor[0]
-    else:
-      return None
-  
   def dijkstra(self, no_origem):
-    visitados = []
     #crio um dic com a estrutura: Vertice - Peso Acumulado, Antecessor
     distancia = {vertice: [np.inf, None] for vertice in self.corpo}
     distancia[no_origem][0] = 0 
     custo = [(0, no_origem)] #add o nó de origem ao custo
     
+    #enquanto minha lista de custos não for 0, continua 
     while custo:
       peso_acumulado, no_atual = heapq.heappop(custo)
       #pego os vertíces adjs ao no atual
       adjacentes = self.get_adjacente(no_atual)
       for vertice, peso_aresta in adjacentes:
-        if vertice not in visitados:
           peso = peso_acumulado + peso_aresta
           if peso < distancia[vertice][0]:
             distancia[vertice] = peso, no_atual
-            heapq.heappush(custo, (peso, vertice)) #add o vertice adj e seu peso a lista de custos
-      #visitados.append(vertice)
+            heapq.heappush(custo, (peso, vertice)) #add tds os vertice adjs e seu peso a lista de custos
     
+    #retiro da lista de distancias os vértices valores são inf
     nos_nao_alcancados = [v for v in distancia if distancia[v][0] == np.inf]
     for v in nos_nao_alcancados:
       distancia.pop(v)
