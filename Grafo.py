@@ -129,6 +129,7 @@ class Grafo:
           for vertice in self.vertices:
               adjacentes = self.corpo[vertice]
               if adjacentes:
+                  #formata os dados, e escreve no arquivo
                   dados_formatados = [f"{aresta} ->" for aresta in adjacentes]
                   f.write(f"{vertice}:{dados_formatados}\n")
               else:
